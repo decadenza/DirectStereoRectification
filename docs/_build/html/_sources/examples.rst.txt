@@ -1,0 +1,38 @@
+examples package
+================
+
+Submodules
+----------
+
+examples.calibrationData0 module
+--------------------------------
+
+.. automodule:: examples.calibrationData0
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
+examples.calibrationData1 module
+--------------------------------
+
+.. automodule:: examples.calibrationData1
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
+examples.calibrationData2 module
+--------------------------------
+
+.. automodule:: examples.calibrationData2
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
+
+Module contents
+---------------
+
+.. automodule:: examples
+   :members:
+   :undoc-members:
+   :show-inheritance:
