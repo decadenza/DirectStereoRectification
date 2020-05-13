@@ -58,7 +58,6 @@ if __name__ == "__main__":
     # See getAnalyticalRectifications() for details
     Rectify1, Rectify2 = rectification.getDirectRectifications(A1, A2, RT1, RT2, dims1, dims2, F)
     
-    print("RECTIFY",Rectify1, Rectify2)
     # Final rectified image dimensions (common to both images)
     destDims = dims1
     
