@@ -24,13 +24,12 @@ import rectification
 
 if __name__ == "__main__":
     print("Direct Rectification EXAMPLE")
-    
+
     # Load images
     img1 = cv2.imread("left.png")               # Left image
     img2 = cv2.imread("right.png")              # Left image
     dims1 = img1.shape[::-1][1:]                # Image dimensions as (width, height)
     dims2 = img2.shape[::-1][1:]
-    
     
     # Calibration data
     A1 = np.array([[ 960, 0, 960/2], [0, 960, 540/2], [0,0,1]])             # Left camera matrix
@@ -41,7 +40,7 @@ if __name__ == "__main__":
     RT2 = np.array([[ 0.94090474,  0.33686835,  0.03489951,  1.0174818 ],   # Right extrinsic parameters
                     [ 0.14616159, -0.31095025, -0.93912017,  2.36511779],
                     [-0.30550784,  0.88872361, -0.34181178, 14.08488464]])
-    
+
     # Distortion coefficients
     # Empty because we're using digitally acquired images (no lens distortion).
     distCoeffs1 = np.array([])   
@@ -59,12 +58,13 @@ if __name__ == "__main__":
     # See getAnalyticalRectifications() for details
     Rectify1, Rectify2 = rectification.getDirectRectifications(A1, A2, RT1, RT2, dims1, dims2, F)
     
+    print("RECTIFY",Rectify1, Rectify2)
     # Final rectified image dimensions (common to both images)
     destDims = dims1
     
     # Get fitting affine transformation to fit the images into the frame
     # Affine transformations do not introduce perspective distortion
-    K = rectification.getFittingMatrix(Rectify1, Rectify2, dims1, dims2, destDims=destDims)
+    K = rectification.getFittingMatrix(Rectify1, Rectify2, dims1, dims2, destDims=dims1)
     
     # Compute maps with OpenCV considering rectifications, fitting transformations and lens distortion
     # These maps can be stored and applied to rectify any image pair of the same stereo rig

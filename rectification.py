@@ -160,37 +160,46 @@ def getDirectRectifications(A1, A2, RT1, RT2, dims1, dims2, F):
         bv = np.linalg.inv(RT2[:,:3]).dot(RT2[:,3]) - np.linalg.inv(RT1[:,:3]).dot(RT1[:,3])
         
         # Auxiliary matrices
-        B = bv.dot(bv) * np.eye(3) - bv[:,None].dot(bv[None,:])
-        L1 = np.transpose( np.linalg.inv(RT1[:,:3]).dot(np.linalg.inv(A1)) ).dot(B.T).dot( np.linalg.inv(RT1[:,:3]).dot(np.linalg.inv(A1)) )
-        L2 = np.transpose( F.dot(np.array([[0,-1,0],[1,0,0],[0,0,0]])).dot( np.transpose( np.linalg.inv(RT1[:,:3]).dot(np.linalg.inv(A1)) ).dot(B).dot( np.linalg.inv(RT1[:,:3]).dot(np.linalg.inv(A1)) )  ) )
+        B = ( bv.dot(bv) * np.eye(3) - bv[:,None].dot(bv[None,:]) ).dot(np.linalg.inv(A1.dot(RT1[:,:3])))
+        L1 = np.transpose(np.linalg.inv(A1.dot(RT1[:,:3]))).dot(B)
+        L2 = np.transpose(np.linalg.inv(A2.dot(RT2[:,:3]))).dot(B)
         
         # Auxiliary matrices II (as in Loop-Zhang algorithm)
+        # N.B. The variable P1 is actually P1.P1^T and so on.
         P1 = (dims1[0]*dims1[1]/12)*np.array([[dims1[0]**2 - 1, 0, 0],[0, dims1[1]**2 - 1,0],[0, 0, 0]])
         Pc1 = np.array([[(dims1[0] - 1)**2/4, (dims1[0] - 1)*(dims1[1] - 1)/4, (dims1[0] - 1)/2], [(dims1[0] - 1)*(dims1[1] - 1)/4, (dims1[1] - 1)**2/4, (dims1[1] - 1)/2],[(dims1[0] - 1)/2, (dims1[1] - 1)/2, 1]])
         P2 = (dims2[0]*dims2[1]/12)*np.array([[dims2[0]**2 - 1, 0, 0],[0, dims2[1]**2 - 1,0],[0, 0, 0]])
         Pc2 = np.array([[(dims2[0] - 1)**2/4, (dims2[0] - 1)*(dims2[1] - 1)/4, (dims2[0] - 1)/2], [(dims2[0] - 1)*(dims2[1] - 1)/4, (dims2[1] - 1)**2/4, (dims2[1] - 1)/2],[(dims2[0] - 1)/2, (dims2[1] - 1)/2, 1]])
         
-        if np.all(np.equal(RT1[:,:3], RT2[:,:3])):
+        P1tilde = L1.T.dot(P1).dot(L1)
+        Pc1tilde = L1.T.dot(Pc1).dot(L1)
+        P2tilde = L2.T.dot(P2).dot(L2)
+        Pc2tilde = L2.T.dot(Pc2).dot(L2)
+        
+        # Polynomial coefficients
+        m1 = P1tilde[1,2]*Pc1tilde[1,2] - P1tilde[2,2]*Pc1tilde[1,1]
+        m2 = P1tilde[1,1]*Pc1tilde[1,2] - P1tilde[1,2]*Pc1tilde[1,1]
+        
+        if np.all(np.equal(RT1[:,:3], RT2[:,:3])) and np.all(np.equal(A1, A2)) and np.all(np.equal(P1, P2)) and np.all(np.equal(Pc1, Pc2)):
+            print("CASO PARTICOLARE 2")
             # PARTICULAR CASE 2: The cameras have the same orientation: we have a single solution
-            sol = -( L1[1,:].dot(P1).dot(L1[2,:]) / L1[1,:].dot(P1).dot(L1[1,:]) ) * ( L1[1,:].dot(Pc1).dot(L1[2,:]) / L1[1,:].dot(Pc1).dot(L1[1,:]) ) - ( L1[2,:].dot(P1).dot(L1[2,:]) / L1[1,:].dot(P1).dot(L1[1,:]) )
-            sol = sol / ( L1[1,:].dot(Pc1).dot(L1[2,:]) / L1[1,:].dot(Pc1).dot(L1[1,:]) - L1[1,:].dot(P1).dot(L1[2,:]) / L1[1,:].dot(P1).dot(L1[1,:]) )
-            sol = [sol]
+            sol = [-m1/m2]
             
         else:
-            # GENERAL CASE
             
-            # Auxiliary coefficients
-            M1 = ( L1[1,:].dot(P1).dot(L1[1,:]) / L1[1,:].dot(P1).dot(L1[2,:]) ) * ( L1[1,:].dot(Pc1).dot(L1[2,:]) / L1[1,:].dot(Pc1).dot(L1[1,:]) ) - 1
-            N1 = ( L1[1,:].dot(P1).dot(L1[2,:]) / L1[2,:].dot(P1).dot(L1[2,:]) ) * ( L1[1,:].dot(Pc1).dot(L1[2,:]) / L1[1,:].dot(Pc1).dot(L1[1,:]) ) - 1
-            M2 = ( L2[1,:].dot(P2).dot(L2[1,:]) / L2[1,:].dot(P2).dot(L2[2,:]) ) * ( L2[1,:].dot(Pc2).dot(L2[2,:]) / L2[1,:].dot(Pc2).dot(L2[1,:]) ) - 1
-            N2 = ( L2[1,:].dot(P2).dot(L2[2,:]) / L2[2,:].dot(P2).dot(L2[2,:]) ) * ( L2[1,:].dot(Pc2).dot(L2[2,:]) / L2[1,:].dot(Pc2).dot(L2[1,:]) ) - 1
+            # Polynomial coefficients II
+            m3 = Pc2tilde[1,2]/Pc2tilde[1,1]
+            m4 = Pc2tilde[1,1]/Pc1tilde[1,1]
+            m5 = P2tilde[1,2]*Pc2tilde[1,2] - P2tilde[2,2]*Pc2tilde[1,1]
+            m6 = P2tilde[1,1]*Pc2tilde[1,2] - P2tilde[1,2]*Pc2tilde[1,1]
+            m7 = Pc1tilde[1,2]/Pc1tilde[1,1]
+            m8 = 1/m4
             
-            # Polynomial coefficients
-            a = L2[1,:].dot(Pc2).dot(L2[1,:]) * L1[1,:].dot(P1).dot(L1[2,:]) * M1 + L1[1,:].dot(Pc1).dot(L1[1,:]) * L2[1,:].dot(P2).dot(L2[2,:]) * M2
-            b = 3 * (L2[1,:].dot(Pc2).dot(L2[2,:])*L1[1,:].dot(P1).dot(L1[2,:])*M1) + L2[1,:].dot(Pc2).dot(L2[1,:])*L1[2,:].dot(P1).dot(L1[2,:])*N1+ 3*(L1[1,:].dot(Pc1).dot(L1[2,:])*L2[1,:].dot(P2).dot(L2[2,:])*M2) + L1[1,:].dot(Pc1).dot(L1[1,:])*L2[2,:].dot(P2).dot(L2[2,:])*N2
-            c = 3 * ( (L2[1,:].dot(Pc2).dot(L2[2,:]))**2 * L1[1,:].dot(P1).dot(L1[2,:])*M1 / L2[1,:].dot(Pc2).dot(L2[1,:]) + L2[1,:].dot(Pc2).dot(L2[2,:]) * L1[2,:].dot(P1).dot(L1[2,:])*N1+ (L1[1,:].dot(Pc1).dot(L1[2,:]))**2 * L2[1,:].dot(P2).dot(L2[2,:])*M2 / L1[1,:].dot(Pc1).dot(L1[1,:]) + L1[1,:].dot(Pc1).dot(L1[2,:]) * L2[2,:].dot(P2).dot(L2[2,:])*N2 )
-            d = L1[1,:].dot(P1).dot(L1[2,:]) * (L2[1,:].dot(Pc2).dot(L2[2,:]))**3 * M1 / (L2[1,:].dot(Pc2).dot(L2[1,:]))**2 + 3*(L1[2,:].dot(P1).dot(L1[2,:])*(L2[1,:].dot(Pc2).dot(L2[2,:]))**2 * N1/ L2[1,:].dot(Pc2).dot(L2[1,:]) ) + L2[1,:].dot(P2).dot(L2[2,:])*(L1[1,:].dot(Pc1).dot(L1[2,:]))**3 * M2 / (L1[1,:].dot(Pc1).dot(L1[1,:]))**2 + 3*(L2[2,:].dot(P2).dot(L2[2,:])*(L1[1,:].dot(Pc1).dot(L1[2,:]))**2 * N2 / L1[1,:].dot(Pc1).dot(L1[1,:]) )
-            e = L1[2,:].dot(P1).dot(L1[2,:]) * (L2[1,:].dot(Pc2).dot(L2[2,:]))**3 * N1/ (L2[1,:].dot(Pc2).dot(L2[1,:]))**2 + L2[2,:].dot(P2).dot(L2[2,:])*(L1[1,:].dot(Pc1).dot(L1[2,:]))**3 * N2 / (L1[1,:].dot(Pc1).dot(L1[1,:]))**2
+            a = m2*m4 + m6*m8
+            b = m1*m4 + 3*m2*m3*m4 + m5*m8 + 3*m6*m7*m8
+            c = 3*(m1*m3*m4 + m2*m3**2*m4 + m5*m7*m8 + m6*m7**2*m8)
+            d = 3*m1*m3**2*m4 + m2*m3**3*m4 + 3*m5*m7**2*m8 + m6*m7**3*m8
+            e = m1*m3**3*m4 + m5*m7**3*m8
             
             # 4th degree equation formula
             p = (8*a*c - 3 * b**2 ) / (8 * a**2)
@@ -202,11 +211,11 @@ def getDirectRectifications(A1, A2, RT1, RT2, dims1, dims2, F):
             
             # Take acceptable solutions only
             sol = []
-            if -4*Q**2 - 2*p + S/Q > 0:
+            if -4*Q**2 - 2*p + S/Q >= 0:
                 sol.append( -b / (4*a) - Q - (1/2)*math.sqrt( -4*Q**2 - 2*p + S/Q) )
                 sol.append( -b / (4*a) - Q + (1/2)*math.sqrt( -4*Q**2 - 2*p + S/Q) )
             
-            if -4*Q**2 - 2*p - S/Q > 0:
+            if -4*Q**2 - 2*p - S/Q >= 0:
                 sol.append( -b / (4*a) + Q - (1/2)*math.sqrt( -4*Q**2 - 2*p - S/Q) )
                 sol.append( -b / (4*a) + Q + (1/2)*math.sqrt( -4*Q**2 - 2*p - S/Q) )
             
@@ -231,8 +240,8 @@ def getDirectRectifications(A1, A2, RT1, RT2, dims1, dims2, F):
             Rnew = np.array([xv,yv,zv])     # New camera orientation
             
             # Loop-Zhang w1 and w2
-            w1 = Rnew.dot(np.linalg.inv(RT1[:,:3])).dot(np.linalg.inv(A1))[2,:]
-            w2 = Rnew.dot(np.linalg.inv(RT2[:,:3])).dot(np.linalg.inv(A2))[2,:]
+            w1 = Rnew.dot( np.linalg.inv(A1.dot(RT1[:,:3])) )[2,:]
+            w2 = Rnew.dot( np.linalg.inv(A2.dot(RT2[:,:3])) )[2,:]
             w1 = w1 / w1[2]                 # Rescale with 3rd coordinate as 1
             w2 = w2 / w2[2]
             #l = -w1[1]/w1[0]               # Loop-Zhang lambda parameter (not needed)
@@ -241,7 +250,7 @@ def getDirectRectifications(A1, A2, RT1, RT2, dims1, dims2, F):
         
         
         def getDistortion(s):
-            # Inner function compact version of getLoopZhangDistortionValue()
+            # Inner function as compact version of getLoopZhangDistortionValue()
             w1, w2 = getW(s)    
             dist1 = float( w1.dot(P1).dot(w1)/w1.dot(Pc1).dot(w1) )
             dist2 = float( w2.dot(P2).dot(w2)/w2.dot(Pc2).dot(w2) )
