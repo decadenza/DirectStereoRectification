@@ -26,8 +26,8 @@ if __name__ == "__main__":
     print("Direct Rectification EXAMPLE")
 
     # Load images
-    img1 = cv2.imread("img/left.png")               # Left image
-    img2 = cv2.imread("img/right.png")              # Left image
+    img1 = cv2.imread("img/left.png")           # Left image
+    img2 = cv2.imread("img/right.png")          # Right image
     dims1 = img1.shape[::-1][1:]                # Image dimensions as (width, height)
     dims2 = img2.shape[::-1][1:]
     
@@ -50,11 +50,11 @@ if __name__ == "__main__":
     Po1 = A1.dot(RT1)                               
     Po2 = A2.dot(RT2)
     
-    # Fundamental matrix F is known from calibration, alternatively
+    # Fundamental matrix F is usually known from calibration, alternatively
     # you can get the Fundamental matrix from projection matrices
     F = dr.getFundamentalMatrixFromProjections(Po1, Po2)
     
-    # ANALYTICAL RECTIFICATION to get the *rectification homographies that minimize distortion* 
+    # ANALYTICAL RECTIFICATION to get the **rectification homographies that minimize distortion**
     # See function dr.getAnalyticalRectifications() for details
     Rectify1, Rectify2 = dr.getDirectRectifications(A1, A2, RT1, RT2, dims1, dims2, F)
     
