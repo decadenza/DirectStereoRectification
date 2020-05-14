@@ -20,14 +20,14 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 import cv2
 import numpy as np
 
-import rectification
+import directRectification as dr
 
 if __name__ == "__main__":
     print("Direct Rectification EXAMPLE")
 
     # Load images
-    img1 = cv2.imread("left.png")               # Left image
-    img2 = cv2.imread("right.png")              # Left image
+    img1 = cv2.imread("img/left.png")               # Left image
+    img2 = cv2.imread("img/right.png")              # Left image
     dims1 = img1.shape[::-1][1:]                # Image dimensions as (width, height)
     dims2 = img2.shape[::-1][1:]
     
@@ -52,18 +52,18 @@ if __name__ == "__main__":
     
     # Fundamental matrix F is known from calibration, alternatively
     # you can get the Fundamental matrix from projection matrices
-    F = rectification.getFundamentalMatrixFromProjections(Po1, Po2)
+    F = dr.getFundamentalMatrixFromProjections(Po1, Po2)
     
     # ANALYTICAL RECTIFICATION to get the *rectification homographies that minimize distortion* 
-    # See function rectification.getAnalyticalRectifications() for details
-    Rectify1, Rectify2 = rectification.getDirectRectifications(A1, A2, RT1, RT2, dims1, dims2, F)
+    # See function dr.getAnalyticalRectifications() for details
+    Rectify1, Rectify2 = dr.getDirectRectifications(A1, A2, RT1, RT2, dims1, dims2, F)
     
     # Final rectified image dimensions (common to both images)
     destDims = dims1
     
     # Get fitting affine transformation to fit the images into the frame
     # Affine transformations do not introduce perspective distortion
-    K = rectification.getFittingMatrix(Rectify1, Rectify2, dims1, dims2, destDims=dims1)
+    K = dr.getFittingMatrix(Rectify1, Rectify2, dims1, dims2, destDims=dims1)
     
     # Compute maps with OpenCV considering rectifications, fitting transformations and lens distortion
     # These maps can be stored and applied to rectify any image pair of the same stereo rig
@@ -79,7 +79,7 @@ if __name__ == "__main__":
     img2_rect = cv2.line(img2_rect, (0,int((destDims[1]-1)/2)), (destDims[0]-1,int((destDims[1]-1)/2)), color=(0,0,255), thickness=1)
     
     # Print some info
-    perspDist = rectification.getLoopZhangDistortionValue(Rectify1, dims1)+rectification.getLoopZhangDistortionValue(Rectify2, dims2)
+    perspDist = dr.getLoopZhangDistortionValue(Rectify1, dims1)+dr.getLoopZhangDistortionValue(Rectify2, dims2)
     print("Perspective distortion:", perspDist)
     
     # Show images
