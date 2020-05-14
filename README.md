@@ -11,4 +11,4 @@ Full details in the paper: **COMING SOON**.
 OpenCV is required only for the example.
 
 ## Disclamer
-The code is provided "as is" wihout any warranties. For details see LICENCE file.
+The code is provided "as is" wihout any warranty. For details see LICENCE file.
