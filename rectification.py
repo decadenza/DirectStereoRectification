@@ -171,14 +171,14 @@ def getDirectRectifications(A1, A2, RT1, RT2, dims1, dims2, F):
         P2 = (dims2[0]*dims2[1]/12)*np.array([[dims2[0]**2 - 1, 0, 0],[0, dims2[1]**2 - 1,0],[0, 0, 0]])
         Pc2 = np.array([[(dims2[0] - 1)**2/4, (dims2[0] - 1)*(dims2[1] - 1)/4, (dims2[0] - 1)/2], [(dims2[0] - 1)*(dims2[1] - 1)/4, (dims2[1] - 1)**2/4, (dims2[1] - 1)/2],[(dims2[0] - 1)/2, (dims2[1] - 1)/2, 1]])
         
-        P1tilde = L1.T.dot(P1).dot(L1)
-        Pc1tilde = L1.T.dot(Pc1).dot(L1)
-        P2tilde = L2.T.dot(P2).dot(L2)
-        Pc2tilde = L2.T.dot(Pc2).dot(L2)
+        M1 = L1.T.dot(P1).dot(L1)
+        C1 = L1.T.dot(Pc1).dot(L1)
+        M2 = L2.T.dot(P2).dot(L2)
+        C2 = L2.T.dot(Pc2).dot(L2)
         
         # Polynomial coefficients
-        m1 = P1tilde[1,2]*Pc1tilde[1,2] - P1tilde[2,2]*Pc1tilde[1,1]
-        m2 = P1tilde[1,1]*Pc1tilde[1,2] - P1tilde[1,2]*Pc1tilde[1,1]
+        m1 = M1[1,2]*C1[1,2] - M1[2,2]*C1[1,1]
+        m2 = M1[1,1]*C1[1,2] - M1[1,2]*C1[1,1]
         
         if np.all(np.equal(RT1[:,:3], RT2[:,:3])) and np.all(np.equal(A1, A2)) and np.all(np.equal(P1, P2)) and np.all(np.equal(Pc1, Pc2)):
             print("CASO PARTICOLARE 2")
@@ -188,11 +188,11 @@ def getDirectRectifications(A1, A2, RT1, RT2, dims1, dims2, F):
         else:
             
             # Polynomial coefficients II
-            m3 = Pc2tilde[1,2]/Pc2tilde[1,1]
-            m4 = Pc2tilde[1,1]/Pc1tilde[1,1]
-            m5 = P2tilde[1,2]*Pc2tilde[1,2] - P2tilde[2,2]*Pc2tilde[1,1]
-            m6 = P2tilde[1,1]*Pc2tilde[1,2] - P2tilde[1,2]*Pc2tilde[1,1]
-            m7 = Pc1tilde[1,2]/Pc1tilde[1,1]
+            m3 = C2[1,2]/C2[1,1]
+            m4 = C2[1,1]/C1[1,1]
+            m5 = M2[1,2]*C2[1,2] - M2[2,2]*C2[1,1]
+            m6 = M2[1,1]*C2[1,2] - M2[1,2]*C2[1,1]
+            m7 = C1[1,2]/C1[1,1]
             m8 = 1/m4
             
             a = m2*m4 + m6*m8

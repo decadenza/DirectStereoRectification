@@ -55,7 +55,7 @@ if __name__ == "__main__":
     F = rectification.getFundamentalMatrixFromProjections(Po1, Po2)
     
     # ANALYTICAL RECTIFICATION to get the *rectification homographies that minimize distortion* 
-    # See getAnalyticalRectifications() for details
+    # See function rectification.getAnalyticalRectifications() for details
     Rectify1, Rectify2 = rectification.getDirectRectifications(A1, A2, RT1, RT2, dims1, dims2, F)
     
     # Final rectified image dimensions (common to both images)
@@ -75,8 +75,8 @@ if __name__ == "__main__":
     img2_rect = cv2.remap(img2, mapx2, mapy2, interpolation=cv2.INTER_LINEAR);
     
     # Draw a line as reference
-    img1_rect = cv2.line(img1_rect, (0,int((destDims[1]-1)/2)), (destDims[0]-1,int((destDims[1]-1)/2)) , color=(0,0,255), thickness=1 )
-    img2_rect = cv2.line(img2_rect, (0,int((destDims[1]-1)/2)), (destDims[0]-1,int((destDims[1]-1)/2)) , color=(0,0,255), thickness=1 )
+    img1_rect = cv2.line(img1_rect, (0,int((destDims[1]-1)/2)), (destDims[0]-1,int((destDims[1]-1)/2)), color=(0,0,255), thickness=1)
+    img2_rect = cv2.line(img2_rect, (0,int((destDims[1]-1)/2)), (destDims[0]-1,int((destDims[1]-1)/2)), color=(0,0,255), thickness=1)
     
     # Print some info
     perspDist = rectification.getLoopZhangDistortionValue(Rectify1, dims1)+rectification.getLoopZhangDistortionValue(Rectify2, dims2)
