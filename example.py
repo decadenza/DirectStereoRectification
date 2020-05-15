@@ -20,7 +20,7 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 import cv2
 import numpy as np
 
-import directRectification as dr
+import rectification
 
 if __name__ == "__main__":
     print("Direct Rectification EXAMPLE")
@@ -52,11 +52,11 @@ if __name__ == "__main__":
     
     # Fundamental matrix F is usually known from calibration, alternatively
     # you can get the Fundamental matrix from projection matrices
-    F = dr.getFundamentalMatrixFromProjections(Po1, Po2)
+    F = rectification.getFundamentalMatrixFromProjections(Po1, Po2)
     
     # ANALYTICAL RECTIFICATION to get the **rectification homographies that minimize distortion**
     # See function dr.getAnalyticalRectifications() for details
-    Rectify1, Rectify2 = dr.getDirectRectifications(A1, A2, RT1, RT2, dims1, dims2, F)
+    Rectify1, Rectify2 = rectification.getDirectRectifications(A1, A2, RT1, RT2, dims1, dims2, F)
     
     # Final rectified image dimensions (common to both images)
     destDims = dims1
@@ -79,7 +79,7 @@ if __name__ == "__main__":
     img2_rect = cv2.line(img2_rect, (0,int((destDims[1]-1)/2)), (destDims[0]-1,int((destDims[1]-1)/2)), color=(0,0,255), thickness=1)
     
     # Print some info
-    perspDist = dr.getLoopZhangDistortionValue(Rectify1, dims1)+dr.getLoopZhangDistortionValue(Rectify2, dims2)
+    perspDist = rectification.getLoopZhangDistortionValue(Rectify1, dims1)+rectification.getLoopZhangDistortionValue(Rectify2, dims2)
     print("Perspective distortion:", perspDist)
     
     # Show images
