@@ -5,10 +5,13 @@ An elaboration of the procedure originally introduced by Charles Loop and Zhengy
 Full details in the paper: **COMING SOON**.
 
 ## Dependencies
-- Python 3 (fully tested with 3.8.2)
-- NumPy
+- Python 3 (tested with version 3.8.2)
+- NumPy (tested with version 1.18.2)
 
 OpenCV is required only for the example.
 
+## Usage
+See commented files [example.py](example.py) and [rectification.py](rectification.py).
+
 ## Disclamer
-The code is provided "as is" wihout any warranty. For details see LICENCE file.
+The code is provided "as is" wihout any warranty. For details see [LICENCE](LICENCE) file.
