@@ -53,17 +53,17 @@ with minimim perspective distortion.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>A1, A2</strong> (<em>numpy.array</em>) – 3x3 camera matrices of intrinsic parameters.</p></li>
-<li><p><strong>RT1, RT2</strong> (<em>numpy.array</em>) – 3x4 extrinsic parameters matrices.</p></li>
+<li><p><strong>A1, A2</strong> (<em>numpy.ndarray</em>) – 3x3 camera matrices of intrinsic parameters.</p></li>
+<li><p><strong>RT1, RT2</strong> (<em>numpy.ndarray</em>) – 3x4 extrinsic parameters matrices.</p></li>
 <li><p><strong>dims1, dims2</strong> (<em>tuple</em>) – Original images dimensions as (width, height).</p></li>
-<li><p><strong>F</strong> (<em>numpy.array</em>) – 3x3 fundamental matrix.</p></li>
+<li><p><strong>F</strong> (<em>numpy.ndarray</em>) – 3x3 fundamental matrix.</p></li>
 </ul>
 </dd>
 <dt class="field-even">Returns</dt>
 <dd class="field-even"><p><strong>Rectify1, Rectify2</strong> – 3x3 rectification homographies.</p>
 </dd>
 <dt class="field-odd">Return type</dt>
-<dd class="field-odd"><p>numpy.array</p>
+<dd class="field-odd"><p>numpy.ndarray</p>
 </dd>
 </dl>
 </dd></dl>
@@ -74,13 +74,14 @@ with minimim perspective distortion.</p>
 <dd><p>Compute affine tranformation to fit the rectified images into desidered dimensions.</p>
 <p>After rectification usually the image is no more into the original image bounds.
 One can apply any transformation that do not affect disparity to fit the image into boundaries.
-This function corrects flipped images too.</p>
+This function corrects flipped images too.
+The algorithm may fail if one epipole is too close to the image.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>H1, H2</strong> (<em>numpy.array</em>) – 3x3 rectifying homographies.</p></li>
+<li><p><strong>H1, H2</strong> (<em>numpy.ndarray</em>) – 3x3 rectifying homographies.</p></li>
 <li><p><strong>dims1, dims2</strong> (<em>tuple</em>) – Resolution of images as (width, height) tuple.</p></li>
-<li><p><strong>distCoeffs1, distCoeffs2</strong> (<em>numpy.array, optional</em>) – Distortion coefficients in the order followed by OpenCV. If None is passed, zero distortion is assumed.</p></li>
+<li><p><strong>distCoeffs1, distCoeffs2</strong> (<em>numpy.ndarray, optional</em>) – Distortion coefficients in the order followed by OpenCV. If None is passed, zero distortion is assumed.</p></li>
 <li><p><strong>destDims</strong> (<em>tuple, optional</em>) – Resolution of destination images as (width, height) tuple (default to the first image resolution).</p></li>
 <li><p><strong>zoom</strong> (<em>float, optional</em>) – Zoom parameter to be applied to both images (default to 1). Used to remove unwanted portions of the images.</p></li>
 </ul>
@@ -89,7 +90,7 @@ This function corrects flipped images too.</p>
 <dd class="field-even"><p>3x3 affine transformation to be used both for the first and for the second camera.</p>
 </dd>
 <dt class="field-odd">Return type</dt>
-<dd class="field-odd"><p>numpy.array</p>
+<dd class="field-odd"><p>numpy.ndarray</p>
 </dd>
 </dl>
 </dd></dl>
@@ -100,13 +101,13 @@ This function corrects flipped images too.</p>
 <dd><p>Compute the fundamental matrix from a couple of 3x4 projection matrices.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><p><strong>P1,P2</strong> (<em>numpy.array</em>) – 3x4 projection matrices.</p>
+<dd class="field-odd"><p><strong>P1,P2</strong> (<em>numpy.ndarray</em>) – 3x4 projection matrices.</p>
 </dd>
 <dt class="field-even">Returns</dt>
 <dd class="field-even"><p>The fundamental matrix.</p>
 </dd>
 <dt class="field-odd">Return type</dt>
-<dd class="field-odd"><p>numpy.array</p>
+<dd class="field-odd"><p>numpy.ndarray</p>
 </dd>
 </dl>
 </dd></dl>
@@ -119,7 +120,7 @@ This function corrects flipped images too.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>Hp</strong> (<em>numpy.array</em>) – 3x3 transformation.</p></li>
+<li><p><strong>Hp</strong> (<em>numpy.ndarray</em>) – 3x3 transformation.</p></li>
 <li><p><strong>dims</strong> (<em>tuple</em>) – Image dimensions as (width, height).</p></li>
 </ul>
 </dd>
@@ -140,7 +141,7 @@ This function corrects flipped images too.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>H</strong> (<em>numpy.array</em>) – A 3x3 transformation.</p></li>
+<li><p><strong>H</strong> (<em>numpy.ndarray</em>) – A 3x3 transformation.</p></li>
 <li><p><strong>dims</strong> (<em>tuple</em>) – Image dimensions as (width,height).</p></li>
 </ul>
 </dd>
@@ -161,7 +162,7 @@ This function corrects flipped images too.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>H</strong> (<em>numpy.array</em>) – A 3x3 transformation.</p></li>
+<li><p><strong>H</strong> (<em>numpy.ndarray</em>) – A 3x3 transformation.</p></li>
 <li><p><strong>dims</strong> (<em>tuple</em>) – Image dimensions as (width,height).</p></li>
 </ul>
 </dd>
@@ -169,7 +170,7 @@ This function corrects flipped images too.</p>
 <dd class="field-even"><p>A 3x3 X-shearing transformation.</p>
 </dd>
 <dt class="field-odd">Return type</dt>
-<dd class="field-odd"><p>numpy.array</p>
+<dd class="field-odd"><p>numpy.ndarray</p>
 </dd>
 </dl>
 </dd></dl>
