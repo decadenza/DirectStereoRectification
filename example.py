@@ -85,7 +85,5 @@ if __name__ == "__main__":
     # Show images
     cv2.imshow('LEFT Rectified', img1_rect)
     cv2.imshow('RIGHT Rectified', img2_rect)
-    cv2.moveWindow("LEFT Rectified", 400,0);
-    cv2.moveWindow("RIGHT Rectified", 800,0);
     cv2.waitKey(0)
     cv2.destroyAllWindows()
