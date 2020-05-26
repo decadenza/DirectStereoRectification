@@ -203,11 +203,11 @@ def getDirectRectifications(A1, A2, RT1, RT2, dims1, dims2, F):
             
             # 4th degree equation formula
             p = (8*a*c - 3 * b**2 ) / (8 * a**2)
-            q = 12*a*e - 3 * b * d + c**2
-            s = 27 * a * d**2 - 72*a*c*e + 27 * b**2 * e - 9*b*c*d + 2 * c**3
-            D0 = math.pow( (1/2)*(s+math.sqrt(s**2 -4*q**3)), 1/3)
+            q = 12*a*e - 3*b*d + c**2
+            s = 27*a*d**2 - 72*a*c*e + 27*b**2*e - 9*b*c*d + 2*c**3
+            D0 = math.pow( (1/2)*(s+math.sqrt(s**2 - 4*q**3)), 1/3)
             Q = (1/2) * math.sqrt( -(2/3)*p + 1/(3*a) * (D0 + q / D0) )
-            S = ( 8 * a**2 * d - 4*a*b*c + b**3 ) / ( 8 * a**3 ) 
+            S = ( 8*a**2*d - 4*a*b*c + b**3 ) / ( 8*a**3 ) 
             
             # Take acceptable solutions only
             sol = []
