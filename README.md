@@ -2,10 +2,20 @@
 Analytic algorithm to compute best rectifying homographies that minimize perspective distortion and without using iterative methods.
 An elaboration of the procedure originally introduced by Charles Loop and Zhengyou Zhang in _“Computing rectifying homographies for stereo vision”_ (1999), DOI: 10.1109/CVPR.1999.786928.
 
-Full details in the paper:
+Full details in the **paper**:
 ```
 Pasquale Lafiosca, Marta Ceccaroni, "Rectifying homographies for stereo vision:
-direct method and implementation", in print.
+direct method and implementation", in print, 2020.
+```
+Cite as:
+```
+@article{DirectStereoRectification,
+    author  = "Pasquale Lafiosca and Marta Ceccaroni",
+    title   = "Rectifying homographies for stereo vision:
+direct method and implementation",
+    year    = "2020",
+    journal = "in print"
+}
 ```
 
 ## Dependencies
