@@ -11,8 +11,7 @@ Cite as:
 ```
 @article{DirectStereoRectification,
     author  = "Pasquale Lafiosca and Marta Ceccaroni",
-    title   = "Rectifying homographies for stereo vision:
-direct method and implementation",
+    title   = "Rectifying homographies for stereo vision: direct method and implementation",
     year    = "2020",
     journal = "in print"
 }
