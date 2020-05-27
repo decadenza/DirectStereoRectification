@@ -1,8 +1,12 @@
 # Direct Stereo Rectification
-Analytic algorithm to compute best homographies for stereo rectification with minimum perspective distortion and without using iterative methods.
+Analytic algorithm to compute best rectifying homographies that minimize perspective distortion and without using iterative methods.
 An elaboration of the procedure originally introduced by Charles Loop and Zhengyou Zhang in _“Computing rectifying homographies for stereo vision”_ (1999), DOI: 10.1109/CVPR.1999.786928.
 
-Full details in the paper: **COMING SOON**.
+Full details in the paper:
+```
+Pasquale Lafiosca, Marta Ceccaroni, "Rectifying homographies for stereo vision:
+direct method and implementation", in print.
+```
 
 ## Dependencies
 - Python 3 (tested with version 3.8.2)
