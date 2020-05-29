@@ -4,7 +4,7 @@ An elaboration of the procedure originally introduced by Charles Loop and Zhengy
 
 Full details in the **paper**:
 
->Pasquale Lafiosca and Marta Ceccaroni, *"Rectifying homographies for stereo vision: direct method and implementation"*, in print, 2020.
+>**Pasquale Lafiosca and Marta Ceccaroni, *"Rectifying homographies for stereo vision: direct method and implementation"*, in print, 2020**.
 
 Cite as:
 ```
