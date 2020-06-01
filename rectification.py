@@ -125,8 +125,6 @@ def getShearingTransformation(H, dims):
     return S
 
 
-
-
 def getDirectRectifications(A1, A2, RT1, RT2, dims1, dims2, F):
     """
     Compute the analytical rectification homographies.
@@ -181,7 +179,6 @@ def getDirectRectifications(A1, A2, RT1, RT2, dims1, dims2, F):
         m2 = M1[1,1]*C1[1,2] - M1[1,2]*C1[1,1]
         
         if np.all(np.equal(RT1[:,:3], RT2[:,:3])) and np.all(np.equal(A1, A2)) and np.all(np.equal(P1, P2)) and np.all(np.equal(Pc1, Pc2)):
-            print("CASO PARTICOLARE 2")
             # PARTICULAR CASE 2: The cameras have the same orientation: we have a single solution
             sol = [-m1/m2]
             
@@ -294,7 +291,6 @@ def getDirectRectifications(A1, A2, RT1, RT2, dims1, dims2, F):
     Rectify2 = Hs2.dot(Hrp2)
     
     return Rectify1, Rectify2
-
 
 
 def getLoopZhangDistortionValue(Hp, dims):
