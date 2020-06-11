@@ -63,12 +63,12 @@ if __name__ == "__main__":
     
     # Get fitting affine transformation to fit the images into the frame
     # Affine transformations do not introduce perspective distortion
-    K = rectification.getFittingMatrix(Rectify1, Rectify2, dims1, dims2, destDims=dims1)
+    K1, K2 = rectification.getFittingMatrix(Rectify1, Rectify2, dims1, dims2, destDims=dims1)
     
     # Compute maps with OpenCV considering rectifications, fitting transformations and lens distortion
     # These maps can be stored and applied to rectify any image pair of the same stereo rig
-    mapx1, mapy1 = cv2.initUndistortRectifyMap(A1, distCoeffs1, Rectify1.dot(A1), K, destDims, cv2.CV_32FC1)
-    mapx2, mapy2 = cv2.initUndistortRectifyMap(A2, distCoeffs2, Rectify2.dot(A2), K, destDims, cv2.CV_32FC1)
+    mapx1, mapy1 = cv2.initUndistortRectifyMap(A1, distCoeffs1, Rectify1.dot(A1), K1, destDims, cv2.CV_32FC1)
+    mapx2, mapy2 = cv2.initUndistortRectifyMap(A2, distCoeffs2, Rectify2.dot(A2), K2, destDims, cv2.CV_32FC1)
     
     # Apply final transformation to images 
     img1_rect = cv2.remap(img1, mapx1, mapy1, interpolation=cv2.INTER_LINEAR);
