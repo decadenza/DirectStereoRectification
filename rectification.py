@@ -370,8 +370,11 @@ def getFittingMatrix(H1, H2, dims1, dims2, destDims=None, zoom=1):
     
     minX1 = min(tR1[0], bR1[0], bL1[0], tL1[0])
     minX2 = min(tR2[0], bR2[0], bL2[0], tL2[0])
+    maxX1 = max(tR1[0], bR1[0], bL1[0], tL1[0])
+    maxX2 = max(tR2[0], bR2[0], bL2[0], tL2[0])
     minX = min(minX1, minX2)
     maxX = max(tR1[0], bR1[0], bL1[0], tL1[0], tR2[0], bR2[0], bL2[0], tL2[0])
+    
     minY = min(tR2[1], bR2[1], bL2[1], tL2[1], tR1[1], bR1[1], bL1[1], tL1[1])
     maxY = max(tR2[1], bR2[1], bL2[1], tL2[1], tR1[1], bR1[1], bL1[1], tL1[1])
     
@@ -389,24 +392,20 @@ def getFittingMatrix(H1, H2, dims1, dims2, destDims=None, zoom=1):
     # Scale Y
     scaleY = flipY * zoom * destDims[1]/(maxY - minY)
     
-    # Translation X
-    tX1 = -minX1 * scaleX
-    tX2 = -minX2 * scaleX
-    
-    # Keep x-centered after zoom
-    s = destDims[0]*(zoom-1)/2
-    if flipX == -1:
-        tX1 += s
-        tX2 += s
+    # Translation X (keep always at left border)
+    if flipX == 1:
+        tX1 = -minX1 * scaleX
+        tX2 = -minX2 * scaleX
     else:
-        tX1 -= s
-        tX2 -= s
-        
-    # Translation Y
-    tY = -minY * scaleY - destDims[1]*(zoom-1)/2
-    if flipY == -1:
-        tY += destDims[1]*zoom
+        tX1 = -maxX1 * scaleX
+        tX2 = -maxX2 * scaleX
     
+    # Translation Y (keep always at top border)
+    if flipY == 1:
+        tY = -minY * scaleY
+    else:
+        tY = -maxY * scaleY
+        
     K1 = np.array( [[scaleX,0,tX1], [0,scaleY,tY], [0,0,1]] )
     K2 = np.array( [[scaleX,0,tX2], [0,scaleY,tY], [0,0,1]] )
     
