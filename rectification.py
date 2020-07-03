@@ -373,7 +373,7 @@ def getFittingMatrix(H1, H2, dims1, dims2, destDims=None, zoom=1):
     maxX1 = max(tR1[0], bR1[0], bL1[0], tL1[0])
     maxX2 = max(tR2[0], bR2[0], bL2[0], tL2[0])
     minX = min(minX1, minX2)
-    maxX = max(tR1[0], bR1[0], bL1[0], tL1[0], tR2[0], bR2[0], bL2[0], tL2[0])
+    maxX = max(maxX1, maxX2)
     
     minY = min(tR2[1], bR2[1], bL2[1], tL2[1], tR1[1], bR1[1], bL1[1], tL1[1])
     maxY = max(tR2[1], bR2[1], bL2[1], tL2[1], tR1[1], bR1[1], bL1[1], tL1[1])
