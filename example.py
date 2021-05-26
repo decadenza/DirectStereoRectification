@@ -32,8 +32,8 @@ if __name__ == "__main__":
     dims2 = img2.shape[::-1][1:]
     
     # Calibration data
-    A1 = np.array([[ 960, 0, 960/2], [0, 960, 540/2], [0,0,1]])             # Left camera matrix
-    A2 = np.array([[ 960, 0, 960/2], [0, 960, 540/2], [0,0,1]])             # Right camera matrix
+    A1 = np.array([[ 960, 0, 960/2], [0, 960, 540/2], [0,0,1]])             # Left camera intrinsic matrix
+    A2 = np.array([[ 960, 0, 960/2], [0, 960, 540/2], [0,0,1]])             # Right camera intrinsic matrix
     RT1 = np.array([[ 0.98920029, -0.11784191, -0.08715574,  2.26296163],   # Left extrinsic parameters
                     [-0.1284277 , -0.41030705, -0.90285909,  0.15825593],
                     [ 0.07063401,  0.90430164, -0.42101002, 11.0683527 ]])
@@ -43,10 +43,11 @@ if __name__ == "__main__":
 
     # Distortion coefficients
     # Empty because we're using digitally acquired images (no lens distortion).
+    # See OpenCV distortion parameters for help.
     distCoeffs1 = np.array([])   
     distCoeffs2 = np.array([])
     
-    # 3x4 projection matrices
+    # 3x4 camera projection matrices
     Po1 = A1.dot(RT1)                               
     Po2 = A2.dot(RT2)
     
@@ -74,7 +75,7 @@ if __name__ == "__main__":
     img1_rect = cv2.remap(img1, mapx1, mapy1, interpolation=cv2.INTER_LINEAR);
     img2_rect = cv2.remap(img2, mapx2, mapy2, interpolation=cv2.INTER_LINEAR);
     
-    # Draw a line as reference
+    # Draw a line as reference (optional)
     img1_rect = cv2.line(img1_rect, (0,int((destDims[1]-1)/2)), (destDims[0]-1,int((destDims[1]-1)/2)), color=(0,0,255), thickness=1)
     img2_rect = cv2.line(img2_rect, (0,int((destDims[1]-1)/2)), (destDims[0]-1,int((destDims[1]-1)/2)), color=(0,0,255), thickness=1)
     
