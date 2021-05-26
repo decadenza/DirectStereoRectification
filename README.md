@@ -1,12 +1,14 @@
 # Direct Stereo Rectification
-Here you can find an algorithm for stereo rectification. This algorithm computes the rectifying homographies that minimize perspective distortion. Our methods does not use iterative methods and provides a closed-form solution.
+Here you can find the algorithm for stereo rectification. This algorithm computes the rectifying homographies that minimize perspective distortion.
+
+Our methods does not use iterative methods and provides a closed-form solution.
 It is an improvement of the approach originally introduced by Charles Loop and Zhengyou Zhang in _“Computing rectifying homographies for stereo vision”_ (1999), DOI: 10.1109/CVPR.1999.786928.
 
 Full details in the **paper**:
 
 **Pasquale Lafiosca and Marta Ceccaroni, *"Rectifying homographies for stereo vision: direct method and implementation"*, Journal of Mathematical Imaging and Vision, 2021, URL https.//doi.org/**.
 
-Please, if you found this useful, cite as:
+Please, if you find this useful, cite as:
 ```
 @article{DirectStereoRectification,
     author  = "Pasquale Lafiosca and Marta Ceccaroni",
