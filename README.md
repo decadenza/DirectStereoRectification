@@ -4,15 +4,16 @@ An elaboration of the procedure originally introduced by Charles Loop and Zhengy
 
 Full details in the **paper**:
 
->**Pasquale Lafiosca and Marta Ceccaroni, *"Rectifying homographies for stereo vision: direct method and implementation"*, in print, 2020**.
+>**Pasquale Lafiosca and Marta Ceccaroni, *"Rectifying homographies for stereo vision: direct method and implementation"*, Journal of Mathematical Imaging and Vision, 2021, URL https.//doi.org/**.
 
 Cite as:
 ```
 @article{DirectStereoRectification,
     author  = "Pasquale Lafiosca and Marta Ceccaroni",
     title   = "Rectifying homographies for stereo vision: direct method and implementation",
-    year    = "2020",
-    journal = "in print"
+    year    = "2021",
+    journal = "Journal of Mathematical Imaging and Vision",
+    url = "https.//doi.org/"
 }
 ```
 
@@ -20,7 +21,7 @@ Cite as:
 - Python 3 (tested with version 3.8.2)
 - NumPy (tested with version 1.18.2)
 
-OpenCV is required only for the example.
+OpenCV is required for the example only.
 
 ## Usage
 See commented files [example.py](example.py) and [rectification.py](rectification.py).
