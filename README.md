@@ -22,11 +22,18 @@ Please, if you find this useful, cite as:
 ## Dependencies
 - Python 3 (tested with version 3.8.2)
 - NumPy (tested with version 1.18.2)
+```
+pip3 install numpy
+```
 
 OpenCV is required for the example only.
 
 ## Usage
-See commented files [example.py](example.py) and [rectification.py](rectification.py).
+Try it with:
+```
+python3 example.py
+```
+Refer to comments in [example.py](example.py) and [rectification.py](rectification.py).
 
 ## Disclamer
 The code is provided "as is" wihout any warranty. For details see [LICENCE](LICENCE) file.
