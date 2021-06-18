@@ -15,7 +15,7 @@ Please, if you find this useful, cite as:
     title   = "Rectifying homographies for stereo vision: direct method and implementation",
     year    = "2021",
     journal = "Journal of Mathematical Imaging and Vision",
-    url = "https.//doi.org/"
+    url     = "https.//doi.org/"
 }
 ```
 
