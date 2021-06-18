@@ -22,11 +22,16 @@ Please, if you find this useful, cite as:
 ## Dependencies
 - Python 3 (tested with version 3.8.2)
 - NumPy (tested with version 1.18.2)
+
+Install as:
 ```
 pip3 install numpy
 ```
 
-OpenCV is required for the example only.
+OpenCV is required for the example only. You can install it with:
+```
+pip3 install opencv-contrib-python
+```
 
 ## Usage
 Try it with:
