@@ -6,18 +6,19 @@ It is an improvement of the approach originally introduced by Charles Loop and Z
 
 Full details in the **paper**:
 
-**Pasquale Lafiosca and Marta Ceccaroni, *"Rectifying homographies for stereo vision: direct method and implementation"*, Journal of Mathematical Imaging and Vision, 2021, URL https.//doi.org/**.
+**Pasquale Lafiosca and Marta Ceccaroni, *"Rectifying homographies for stereo vision: analytical solution for minimal distortion"*, 2022.
 
 Please, if you find this useful, cite as:
 ```
 @article{DirectStereoRectification,
-    author  = "Pasquale Lafiosca and Marta Ceccaroni",
-    title   = "Rectifying homographies for stereo vision: direct method and implementation",
-    year    = "2021",
-    journal = "Journal of Mathematical Imaging and Vision",
-    url     = "https.//doi.org/"
+    author  = {Pasquale Lafiosca and Marta Ceccaroni},
+    title   = {Rectifying homographies for stereo vision: analytical solution for minimal distortion},
+    year    = {2022},
+    journal = {},
+    doi     = {}
 }
 ```
+Journal is coming soon.
 
 ## Dependencies
 - Python 3 (tested with version 3.8.2)
