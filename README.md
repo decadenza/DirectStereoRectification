@@ -11,7 +11,7 @@ Full details in the **paper**:
 Please, if you find this useful, cite as:
 ```
 @article{DirectStereoRectification,
-    author  = {Pasquale Lafiosca and Marta Ceccaroni},
+    author  = {Lafiosca, Pasquale and Ceccaroni, Marta},
     title   = {Rectifying homographies for stereo vision: analytical solution for minimal distortion},
     year    = {2022},
     journal = {},
