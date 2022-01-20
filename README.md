@@ -6,7 +6,7 @@ It is an improvement of the approach originally introduced by Charles Loop and Z
 
 Full details in the **paper**:
 
-**Pasquale Lafiosca and Marta Ceccaroni, *"Rectifying homographies for stereo vision: analytical solution for minimal distortion"*, 2022.
+**Pasquale Lafiosca and Marta Ceccaroni, *"Rectifying homographies for stereo vision: analytical solution for minimal distortion"*, 2022.**
 
 Please, if you find this useful, cite as:
 ```
