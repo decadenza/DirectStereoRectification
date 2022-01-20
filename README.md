@@ -18,7 +18,7 @@ Please, if you find this useful, cite as:
     doi     = {}
 }
 ```
-Journal is coming soon.
+Journal is **coming soon**.
 
 ## Dependencies
 - Python 3 (tested with version 3.8.2)
@@ -42,4 +42,4 @@ python3 example.py
 Refer to comments in [example.py](example.py) and [rectification.py](rectification.py).
 
 ## Disclamer
-The code is provided "as is" wihout any warranty. For details see [LICENCE](LICENCE) file.
+The code is provided "as is" wihout any warranty. For details see [LICENSE](LICENSE) file.
