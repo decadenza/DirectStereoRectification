@@ -4,7 +4,7 @@ Here you can find the algorithm for stereo rectification. This algorithm compute
 Our method does not use optimisation libraries and provides a closed-form solution.
 It is an improvement of the approach originally introduced by Charles Loop and Zhengyou Zhang in _“Computing rectifying homographies for stereo vision”_ (1999), DOI: 10.1109/CVPR.1999.786928.
 
-Full details in our **paper**:
+Full details in our **paper** (soon to be published):
 
 **Lafiosca Pasquale and Ceccaroni Marta, *"Rectifying homographies for stereo vision: analytical solution for minimal distortion"*, 2022.**
 
