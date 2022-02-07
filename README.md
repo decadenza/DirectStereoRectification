@@ -6,7 +6,7 @@ It is an improvement of the approach originally introduced by Charles Loop and Z
 
 Full details in our **paper** (soon to be published):
 
-**Lafiosca Pasquale and Ceccaroni Marta, *"Rectifying homographies for stereo vision: analytical solution for minimal distortion"*, 2022.**
+**Lafiosca Pasquale and Ceccaroni Marta, *"Rectifying homographies for stereo vision: analytical solution for minimal distortion"*, Lecture Notes in Networks and Systems, 2022.**
 
 Please, if you find this useful, cite as:
 ```
@@ -14,11 +14,11 @@ Please, if you find this useful, cite as:
     author  = {Lafiosca, Pasquale and Ceccaroni, Marta},
     title   = {Rectifying homographies for stereo vision: analytical solution for minimal distortion},
     year    = {2022},
-    journal = {},
+    journal = {Lecture Notes in Networks and Systems},
     doi     = {}
 }
 ```
-Journal is **coming soon**.
+DOI and publication are **coming soon**.
 
 ## Dependencies
 - Python 3 (tested with version 3.8.2)
