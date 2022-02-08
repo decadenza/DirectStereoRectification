@@ -13,12 +13,12 @@ https://opencv24-python-tutorials.readthedocs.io/en/latest/py_tutorials/py_calib
 Excerpts are also adapted from Kaustubh Sadekar's open source calibration code:
 https://github.com/spmallick/learnopencv/blob/master/stereo-camera/calibrate.py
 
-This program is free software: you can redistCoeffs2ibute it and/or modify
+This program is free software: you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
 the Free Software Foundation, either version 3 of the License, or
 (at your option) any later version.
 
-This program is distCoeffs2ibuted in the hope that it will be useful,
+This program is distbuted in the hope that it will be useful,
 but WITHOUT ANY WARRANTY; without even the implied warranty of
 MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
 See the GNU General Public License for more details.
@@ -35,7 +35,7 @@ import rectification
 if __name__ == "__main__":
     print("Direct Rectification EXAMPLE\n")
 
-    # Image path for stereo capture
+# Image path for calibration stereo pairs
 pathL = "./chessboard_images/left/"
 pathR = "./chessboard_images/right/"
 
@@ -72,9 +72,9 @@ for i in tqdm(range(1,31)):
 		cv2.drawChessboardCorners(outputL,(9,6),cornersL,retL)
 
 		# Display corners (sanity check for user)
-		#cv2.imshow('cornersR',outputR)
-		#cv2.imshow('cornersL',outputL)
-		#cv2.waitKey(0)
+		cv2.imshow('cornersR',outputR)
+		cv2.imshow('cornersL',outputL)
+		cv2.waitKey(0)
 
 		img_ptsL.append(cornersL)
 		img_ptsR.append(cornersR)
@@ -95,7 +95,7 @@ new_mtxR, roiR= cv2.getOptimalNewCameraMatrix(mtxR,distCoeffs2,(wR,hR),1,(wR,hR)
 print("Stereo calibration .....")
 flags = 0
 flags |= cv2.CALIB_FIX_INTRINSIC
-# Lock the intrinsic camara matrixes, calculate only rotation, translation, Fundamental and Essential matrices
+# Lock the intrinsic camara matrixes; calculate only rotation, translation, Fundamental and Essential matrices
 # Intrinsic parameters for each camera remain unchanged
 
 criteria_stereo= (cv2.TERM_CRITERIA_EPS + cv2.TERM_CRITERIA_MAX_ITER, 30, 0.001)
@@ -103,7 +103,7 @@ criteria_stereo= (cv2.TERM_CRITERIA_EPS + cv2.TERM_CRITERIA_MAX_ITER, 30, 0.001)
 # Estimate transformation of camera two relative to camera one, and produce the Essential and Fundamental matrices
 retS, new_mtxL, distCoeffs1, new_mtxR, distCoeffs2, Rot, Trns, Emat, Fmat = cv2.stereoCalibrate(obj_pts, img_ptsL, img_ptsR, new_mtxL, distCoeffs1, new_mtxR, distCoeffs2, imgL_gray.shape[::-1], criteria_stereo, flags)
 
-# Load images
+# Load images for rectification
 img1 = cv2.imread("img/left.png")           # Left image
 img2 = cv2.imread("img/right.png")          # Right image
 dims1 = img1.shape[::-1][1:]                # Image dimensions as (width, height)
@@ -168,5 +168,5 @@ print("Perspective distortion:", perspDist)
 # Show images
 cv2.imshow('LEFT Rectified', img1_rect)
 cv2.imshow('RIGHT Rectified', img2_rect)
-#cv2.waitKey(0)
+cv2.waitKey(0)
 cv2.destroyAllWindows()
