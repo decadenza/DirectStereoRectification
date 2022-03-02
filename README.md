@@ -8,7 +8,9 @@ Full details in our **paper** (soon to be published):
 
 **Lafiosca Pasquale and Ceccaroni Marta, *"Rectifying homographies for stereo vision: analytical solution for minimal distortion"*, Lecture Notes in Networks and Systems, 2022.**
 
-Please, if you find this useful, cite as:
+Pre-print available [here](https://arxiv.org/abs/2203.00123).
+
+Please, if you find this useful, **cite** as:
 ```
 @article{DirectStereoRectification,
     author  = {Lafiosca, Pasquale and Ceccaroni, Marta},
@@ -18,7 +20,7 @@ Please, if you find this useful, cite as:
     doi     = {}
 }
 ```
-DOI and publication are **coming soon**.
+DOI and official publication are **coming soon**.
 
 ## Dependencies
 - Python 3 (tested with version 3.8.2)
