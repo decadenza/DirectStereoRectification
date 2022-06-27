@@ -17,7 +17,7 @@ Please, if you find this useful, **cite** as:
     title   = {Rectifying homographies for stereo vision: analytical solution for minimal distortion},
     year    = {2022},
     journal = {Lecture Notes in Networks and Systems},
-    volume = {507},
+    volume  = {507},
     doi     = {}
 }
 ```
