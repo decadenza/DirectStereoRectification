@@ -8,7 +8,7 @@ Video presentation [YouTube link](https://youtu.be/oTkYWsB3KTk).
 
 Full details in our **paper**:
 
-**Lafiosca Pasquale and Ceccaroni Marta, *"Rectifying homographies for stereo vision: analytical solution for minimal distortion"*, Lecture Notes in Networks and Systems, 2022.**
+**Lafiosca, P., Ceccaroni, M. (2022). Rectifying Homographies for Stereo Vision: Analytical Solution for Minimal Distortion. In: Arai, K. (eds) Intelligent Computing. SAI 2022. Lecture Notes in Networks and Systems, vol 507. Springer, Cham. https://doi.org/10.1007/978-3-031-10464-0_33**
 
 Pre-print available [here](https://arxiv.org/abs/2203.00123).
 
