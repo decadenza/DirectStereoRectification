@@ -20,9 +20,9 @@ Please, if you find this useful, **cite** as:
     year    = {2022},
     journal = {Lecture Notes in Networks and Systems},
     booktitle = {Intelligent Computing},
-    isbn    = {978-3-031-10464-0}
+    isbn    = {978-3-031-10464-0},
     volume  = {507},
-    pages   = {484--503}
+    pages   = {484--503},
     doi     = {10.1007/978-3-031-10464-0_33},
     url     = {https://doi.org/10.1007/978-3-031-10464-0_33},
     publisher = {Springer International Publishing}
