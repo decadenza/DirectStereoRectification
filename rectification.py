@@ -18,7 +18,7 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 """
 import math
 import numpy as np
-
+import cv2
 
     
 def getFundamentalMatrixFromProjections(P1,P2):
@@ -317,7 +317,8 @@ def getLoopZhangDistortionValue(Hp, dims):
     return float( w.T.dot(PPt).dot(w)/w.T.dot(PcPct).dot(w) )
 
 
-def getFittingMatrices(H1, H2, dims1, dims2, destDims=None, zoom=1):
+def getFittingMatrices(intrinsicMatrix1, intrinsicMatrix2, H1, H2, dims1, dims2,
+                        distCoeffs1=None, distCoeffs2=None, destDims=None, alpha=1):
     """
     Compute affine tranformation to fit the rectified images into desidered dimensions.
     
@@ -328,6 +329,8 @@ def getFittingMatrices(H1, H2, dims1, dims2, destDims=None, zoom=1):
     
     Parameters
     ----------
+    intrinsicMatrix1, intrinsicMatrix2 : numpy.ndarray
+        3x3 original camera matrices of intrinsic parameters.
     H1, H2 : numpy.ndarray
         3x3 rectifying homographies.
     dims1, dims2 : tuple
@@ -336,36 +339,24 @@ def getFittingMatrices(H1, H2, dims1, dims2, destDims=None, zoom=1):
         Distortion coefficients in the order followed by OpenCV. If None is passed, zero distortion is assumed.
     destDims : tuple, optional
         Resolution of destination images as (width, height) tuple (default to the first image resolution).
-    zoom : float, optional
-        Zoom parameter to be applied to both images (default to 1). Used to remove unwanted portions of the images.
+    alpha : float, optional
+        Scaling parameter between 0 and 1 to be applied to both images. If alpha=1 (default), the corners of the original
+        images are preserved. If alpha=0, only valid rectangle is made visible.
+        Intermediate values produce a result in the middle. Extremely skewed camera positions
+        do not work well with alpha<1.
         
     Returns
     -------
     numpy.ndarray
         3x3 affine transformation to be used both for the first and for the second camera.
     """
-    if not destDims:
-        destDims=dims1
     
-    # Calculate image 1 boundaries
-    tL1 = H1.dot(np.array([[0],[0],[1]]))[:,0]
-    tL1 = tL1/tL1[2]
-    bL1 = H1.dot(np.array([[0],[dims1[1]-1],[1]]))[:,0]
-    bL1 = bL1/bL1[2]
-    tR1 = H1.dot(np.array([[dims1[0]-1],[0],[1]]))[:,0]
-    tR1 = tR1/tR1[2]
-    bR1 = H1.dot(np.array([[dims1[0]-1],[dims1[1]-1],[1]]))[:,0]
-    bR1 = bR1/bR1[2]
-    
-    # Calculate image 2 boundaries
-    tL2 = H2.dot(np.array([[0],[0],[1]]))[:,0]
-    tL2 = tL2/tL2[2]
-    bL2 = H2.dot(np.array([[0],[dims2[1]-1],[1]]))[:,0]
-    bL2 = bL2/bL2[2]
-    tR2 = H2.dot(np.array([[dims2[0]-1],[0],[1]]))[:,0]
-    tR2 = tR2/tR2[2]
-    bR2 = H2.dot(np.array([[dims2[0]-1],[dims2[1]-1],[1]]))[:,0]
-    bR2 = bR2/bR2[2]
+    if destDims is None:
+        destDims = dims1
+
+    # Get border points
+    tL1, tR1, bR1, bL1 = _getCorners(H1, intrinsicMatrix1, dims1, distCoeffs1)
+    tL2, tR2, bR2, bL2 = _getCorners(H2, intrinsicMatrix2, dims2, distCoeffs2)
     
     minX1 = min(tR1[0], bR1[0], bL1[0], tL1[0])
     minX2 = min(tR2[0], bR2[0], bL2[0], tL2[0])
@@ -383,35 +374,87 @@ def getFittingMatrices(H1, H2, dims1, dims2, destDims=None, zoom=1):
     if tL1[1]>bL1[1]:
         flipY = -1
     
-    # Scale X (choose scale X to best fit bigger image between left and right)
+    # Scale X (choose common scale X to best fit bigger image between left and right)
     if(maxX2 - minX2 > maxX1 - minX1):
-        scaleX = flipX * zoom * destDims[0]/(maxX2 - minX2)
+        scaleX = flipX * destDims[0]/(maxX2 - minX2)
     else:
-        scaleX = flipX * zoom * destDims[0]/(maxX1 - minX1)
+        scaleX = flipX * destDims[0]/(maxX1 - minX1)
     
     # Scale Y (unique not to lose rectification) 
-    scaleY = flipY * zoom * destDims[1]/(maxY - minY)
+    scaleY = flipY * destDims[1]/(maxY - minY)
     
     # Translation X (keep always at left border)
     if flipX == 1:
-        tX1 = -minX1 * scaleX
-        tX2 = -minX2 * scaleX
+        tX = -min(minX1, minX2) * scaleX
     else:
-        tX1 = -maxX1 * scaleX
-        tX2 = -maxX2 * scaleX
+        tX = -min(maxX1, maxX2) * scaleX
     
     # Translation Y (keep always at top border)
     if flipY == 1:
         tY = -minY * scaleY
     else:
-        tY = -maxY * scaleY
-        
-    K1 = np.array( [[scaleX,0,tX1], [0,scaleY,tY], [0,0,1]] )
-    K2 = np.array( [[scaleX,0,tX2], [0,scaleY,tY], [0,0,1]] )
+        tY = -maxY * scaleY 
     
-    return K1, K2
+    # Final affine transformation    
+    Fit = np.array( [[scaleX,0,tX], [0,scaleY,tY], [0,0,1]] )
+    
+    if alpha >= 1:
+        # Preserve all image corners
+        return Fit
+    
+    if alpha < 0:
+        alpha = 0
+    print("alpha", alpha)
+    # Find inner rectangle for both images 
+    tL1, tR1, bR1, bL1 = _getCorners(Fit.dot(H1), intrinsicMatrix1, destDims, distCoeffs1)
+    tL2, tR2, bR2, bL2 = _getCorners(Fit.dot(H2), intrinsicMatrix2, destDims, distCoeffs2)
+
+    left = max(tL1[0], bL1[0], tL2[0], bL2[0])
+    right = min(tR1[0], bR1[0], tR2[0], bR2[0])
+    top = max(tL1[1], tR1[1], tL2[1], tR2[1])
+    bottom = min(bL1[1], bR1[1], bL2[1], bR2[1])
+
+    s = max(destDims[0]/(right-left), destDims[1]/(bottom-top)) # Extra scaling parameter
+    #s = alpha*s/(s-1) # As linear function of alpha
+    s = (s-1)*(1-alpha) # As linear function of alpha
+    
+    K = np.eye(3)
+    K[0,0] = K[1,1] = s+1
+    K[0,2] = -s*left
+    K[1,2] = -s*top
+    
+    return K.dot(Fit)
 
     
+def _getCorners(H, intrinsicMatrix, dims, distCoeffs=None):
+    """
+    Get image corners after distortion correction and rectification transformation.
     
-
+    Parameters
+    ----------
+    H : numpy.ndarray
+        3x3 rectification homography.
+    intrinsicMatrix : numpy.ndarray
+        3x3 camera matrix of intrinsic parameters.
+    dims : tuple
+        Image dimensions in pixels as (width, height).
+    distCoeffs : numpy.ndarray or None
+        Distortion coefficients (default to None).
     
+    Returns
+    -------
+    tuple
+        Corners of the image clockwise from top-left.
+    """
+    if distCoeffs is None:
+        distCoeffs = np.zeros(5)
+    
+    # Set image corners in the form requested by cv2.undistortPoints
+    corners = np.zeros((4,1,2), dtype=np.float32)
+    corners[0,0] = [0,0]                      # Top left
+    corners[1,0] = [dims[0]-1,0]              # Top right
+    corners[2,0] = [dims[0]-1,dims[1]-1]      # Bottom right
+    corners[3,0] = [0, dims[1]-1]             # Bottom left
+    undist_rect_corners = cv2.undistortPoints(corners, intrinsicMatrix, distCoeffs, R=H.dot(intrinsicMatrix))
+    
+    return [(x,y) for x, y in np.squeeze(undist_rect_corners)]
