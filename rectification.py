@@ -415,10 +415,10 @@ def getFittingMatrix(intrinsicMatrix1, intrinsicMatrix2, H1, H2, dims1, dims2,
     bottom = min(bL1[1], bR1[1], bL2[1], bR2[1])
 
     s = max(destDims[0]/(right-left), destDims[1]/(bottom-top)) # Extra scaling parameter
-    s = (s-1)*(1-alpha) # As linear function of alpha
+    s = (s-1)*(1-alpha) + 1 # As linear function of alpha
     
     K = np.eye(3)
-    K[0,0] = K[1,1] = s+1
+    K[0,0] = K[1,1] = s
     K[0,2] = -s*left
     K[1,2] = -s*top
     

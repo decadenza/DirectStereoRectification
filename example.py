@@ -63,7 +63,7 @@ if __name__ == "__main__":
     
     # Get fitting affine transformation to fit the images into the frame
     # Affine transformations do not introduce perspective distortion
-    Fit = rectification.getFittingMatrix(A1, A2, Rectify1, Rectify2, dims1, dims2, distCoeffs1, distCoeffs2, alpha=1)
+    Fit = rectification.getFittingMatrix(A1, A2, Rectify1, Rectify2, dims1, dims2, distCoeffs1, distCoeffs2)
     
     # Compute maps with OpenCV considering rectifications, fitting transformations and lens distortion
     # These maps can be stored and applied to rectify any image pair of the same stereo rig
