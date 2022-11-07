@@ -317,7 +317,7 @@ def getLoopZhangDistortionValue(Hp, dims):
     return float( w.T.dot(PPt).dot(w)/w.T.dot(PcPct).dot(w) )
 
 
-def getFittingMatrices(intrinsicMatrix1, intrinsicMatrix2, H1, H2, dims1, dims2,
+def getFittingMatrix(intrinsicMatrix1, intrinsicMatrix2, H1, H2, dims1, dims2,
                         distCoeffs1=None, distCoeffs2=None, destDims=None, alpha=1):
     """
     Compute affine tranformation to fit the rectified images into desidered dimensions.
@@ -404,7 +404,7 @@ def getFittingMatrices(intrinsicMatrix1, intrinsicMatrix2, H1, H2, dims1, dims2,
     
     if alpha < 0:
         alpha = 0
-    print("alpha", alpha)
+    
     # Find inner rectangle for both images 
     tL1, tR1, bR1, bL1 = _getCorners(Fit.dot(H1), intrinsicMatrix1, destDims, distCoeffs1)
     tL2, tR2, bR2, bL2 = _getCorners(Fit.dot(H2), intrinsicMatrix2, destDims, distCoeffs2)
@@ -415,7 +415,6 @@ def getFittingMatrices(intrinsicMatrix1, intrinsicMatrix2, H1, H2, dims1, dims2,
     bottom = min(bL1[1], bR1[1], bL2[1], bR2[1])
 
     s = max(destDims[0]/(right-left), destDims[1]/(bottom-top)) # Extra scaling parameter
-    #s = alpha*s/(s-1) # As linear function of alpha
     s = (s-1)*(1-alpha) # As linear function of alpha
     
     K = np.eye(3)
