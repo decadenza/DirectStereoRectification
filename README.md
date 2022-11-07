@@ -28,7 +28,6 @@ Please, if you find this useful, **cite** as:
     publisher = {Springer International Publishing}
 }
 ```
-DOI and official publication are **coming soon**.
 
 ## Dependencies
 - Python 3 (tested with version 3.8.2)
