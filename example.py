@@ -56,7 +56,6 @@ if __name__ == "__main__":
     F = rectification.getFundamentalMatrixFromProjections(Po1, Po2)
     
     # ANALYTICAL RECTIFICATION to get the **rectification homographies that minimize distortion**
-    # See function dr.getAnalyticalRectifications() for details
     Rectify1, Rectify2 = rectification.getDirectRectifications(A1, A2, RT1, RT2, dims1, dims2, F)
     
     # Final rectified image dimensions (common to both images)
@@ -64,27 +63,28 @@ if __name__ == "__main__":
     
     # Get fitting affine transformation to fit the images into the frame
     # Affine transformations do not introduce perspective distortion
-    Fit1, Fit2 = rectification.getFittingMatrices(Rectify1, Rectify2, dims1, dims2, destDims=dims1)
+    Fit = rectification.getFittingMatrices(A1, A2, Rectify1, Rectify2, dims1, dims2, distCoeffs1, distCoeffs2, alpha=1)
     
     # Compute maps with OpenCV considering rectifications, fitting transformations and lens distortion
     # These maps can be stored and applied to rectify any image pair of the same stereo rig
-    mapx1, mapy1 = cv2.initUndistortRectifyMap(A1, distCoeffs1, Rectify1.dot(A1), Fit1, destDims, cv2.CV_32FC1)
-    mapx2, mapy2 = cv2.initUndistortRectifyMap(A2, distCoeffs2, Rectify2.dot(A2), Fit2, destDims, cv2.CV_32FC1)
+    mapx1, mapy1 = cv2.initUndistortRectifyMap(A1, distCoeffs1, Rectify1.dot(A1), Fit, destDims, cv2.CV_32FC1)
+    mapx2, mapy2 = cv2.initUndistortRectifyMap(A2, distCoeffs2, Rectify2.dot(A2), Fit, destDims, cv2.CV_32FC1)
     
     # Apply final transformation to images 
     img1_rect = cv2.remap(img1, mapx1, mapy1, interpolation=cv2.INTER_LINEAR);
     img2_rect = cv2.remap(img2, mapx2, mapy2, interpolation=cv2.INTER_LINEAR);
     
+    # Visualise as single image
+    rectImgs = np.hstack((img1_rect, img2_rect))
+
     # Draw a line as reference (optional)
-    img1_rect = cv2.line(img1_rect, (0,int((destDims[1]-1)/2)), (destDims[0]-1,int((destDims[1]-1)/2)), color=(0,0,255), thickness=1)
-    img2_rect = cv2.line(img2_rect, (0,int((destDims[1]-1)/2)), (destDims[0]-1,int((destDims[1]-1)/2)), color=(0,0,255), thickness=1)
+    rectImgs = cv2.line(rectImgs, (0,int((destDims[1]-1)/2)), (2*destDims[0]-1,int((destDims[1]-1)/2)), color=(0,0,255), thickness=1)
     
     # Print some info
     perspDist = rectification.getLoopZhangDistortionValue(Rectify1, dims1)+rectification.getLoopZhangDistortionValue(Rectify2, dims2)
     print("Perspective distortion:", perspDist)
     
     # Show images
-    cv2.imshow('LEFT Rectified', img1_rect)
-    cv2.imshow('RIGHT Rectified', img2_rect)
+    cv2.imshow('Rectified images', rectImgs)
     cv2.waitKey(0)
     cv2.destroyAllWindows()
