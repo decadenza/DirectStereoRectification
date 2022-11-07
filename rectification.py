@@ -317,7 +317,7 @@ def getLoopZhangDistortionValue(Hp, dims):
     return float( w.T.dot(PPt).dot(w)/w.T.dot(PcPct).dot(w) )
 
 
-def getFittingMatrices(intrinsicMatrix1, intrinsicMatrix2, H1, H2, dims1, dims2,
+def getFittingMatrix(intrinsicMatrix1, intrinsicMatrix2, H1, H2, dims1, dims2,
                         distCoeffs1=None, distCoeffs2=None, destDims=None, alpha=1):
     """
     Compute affine tranformation to fit the rectified images into desidered dimensions.
